@@ -1,0 +1,16 @@
+version: '3.9.11'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      # Monter le modèle
+      - /home/deploy/app/best_lgbm_model.pkl:/app/best_lgbm_model.pkl:ro
+      # Monter les données
+      - /home/deploy/app/data:/app/data:ro
+    environment:
+      - MODEL_PATH=/app/best_lgbm_model.pkl
+      - DATA_DIR=/app/data
+    restart: unless-stopped

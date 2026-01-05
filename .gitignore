@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Modèles ML (trop lourds pour Git)
+*.pkl
+*.joblib
+*.h5
+*.model
+
+# Données
+*.csv
+data/
+
+# MLFlow
+mlruns/
+mlartifacts/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker
+*.tar
+
+# Environnement
+.env
+*.pem
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environnements virtuels
+.scoringvenv/
+driftvenv4/
+*venv/
+
+# Fichiers sensibles
+Token*.txt
+*.txt
+!requirements.txt
+!driftV6requirements.txt
+
+# Images et rapports
+*.png
+*.html
+reports/
+
+# Présentations
+*.pptx
+
+# Archive
+archive/

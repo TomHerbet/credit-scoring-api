@@ -1,0 +1,16 @@
+FROM python:3.11.9-slim
+
+# Copier le fichier requirements.txt
+COPY requirements.txt .
+
+# Installer les dépendances
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copier le code de l'API
+COPY api_v4.py .
+
+# Exposer le port 8000
+EXPOSE 8000
+
+# Commande de démarrage
+CMD ["uvicorn", "api_v3:app", "--host", "0.0.0.0", "--port", "8000"]
