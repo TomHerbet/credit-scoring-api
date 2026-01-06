@@ -2,7 +2,7 @@ version: '3.11.9'
 
 services:
   api:
-    build: .
+    image: tomherbet/credit-risk-api:latest
     ports:
       - "8000:8000"
     volumes:
@@ -13,4 +13,4 @@ services:
     environment:
       - MODEL_PATH=/app/best_lgbm_model.pkl
       - DATA_DIR=/app/data
-    restart: unless-stopped
+    restart: always
