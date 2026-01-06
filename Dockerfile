@@ -13,4 +13,4 @@ COPY api_v4.py .
 EXPOSE 8000
 
 # Commande de démarrage
-CMD ["uvicorn", "api_v3:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "api_v4:app", "--host", "0.0.0.0", "--port", "8000"]
