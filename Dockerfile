@@ -1,5 +1,9 @@
 FROM python:3.11.9-slim
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copier le fichier requirements.txt
 COPY requirements.txt .
 
