@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import pickle
+import os
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler, PolynomialFeatures
 from sklearn.impute import SimpleImputer
 import shap
@@ -16,6 +17,10 @@ warnings.filterwarnings('ignore')
 # Configuration générale
 # ===============================================================
 app = FastAPI(title="Credit Risk API", version="1.0")
+
+# Configuration des chemins via variables d'environnement
+MODEL_PATH = os.getenv('MODEL_PATH', 'best_lgbm_model.pkl')
+DATA_DIR = os.getenv('DATA_DIR', './data')
 
 model = None
 preprocessed_test_data = None
@@ -46,7 +51,9 @@ class GeneralInfoResponse(BaseModel):
 # ===============================================================
 # Fonctions de chargement
 # ===============================================================
-def load_model(model_path=r'C:\Users\herbett\OneDrive - LEMKEN GmbH & Co.KG\Documents\Data_Science_OC\Implementez_un_modele_de_scoring\best_lgbm_model.pkl'):
+def load_model(model_path=None):
+    if model_path is None:
+        model_path = MODEL_PATH
     try:
         with open(model_path, 'rb') as f:
             loaded_model = pickle.load(f)
@@ -57,10 +64,12 @@ def load_model(model_path=r'C:\Users\herbett\OneDrive - LEMKEN GmbH & Co.KG\Docu
         raise
 
 
-def load_data(
-    train_path=r'C:\Users\herbett\OneDrive - LEMKEN GmbH & Co.KG\Documents\Data_Science_OC\Implementez_un_modele_de_scoring\data\application_train.csv',
-    test_path=r'C:\Users\herbett\OneDrive - LEMKEN GmbH & Co.KG\Documents\Data_Science_OC\Implementez_un_modele_de_scoring\data\application_test.csv'
-):
+def load_data(train_path=None, test_path=None):
+    if train_path is None:
+        train_path = os.path.join(DATA_DIR, 'application_train.csv')
+    if test_path is None:
+        test_path = os.path.join(DATA_DIR, 'application_test.csv')
+    
     try:
         train = pd.read_csv(train_path)
         test = pd.read_csv(test_path)
@@ -314,14 +323,17 @@ async def startup_event():
     print("INITIALISATION DE L'API")
     print("=" * 50)
 
-    model = load_model('best_lgbm_model.pkl')
+    # Charger le modèle
+    model = load_model()
 
+    # Charger les données
     application_train, application_test = load_data()
     
     # Conserver les données brutes pour les infos clients
     raw_application_train = application_train.copy()
     raw_application_test = application_test.copy()
     
+    # Préprocessing
     X_train, X_test, y_train, features, sk_id_curr = preprocess_data(application_train, application_test)
 
     preprocessed_test_data = X_test
@@ -482,7 +494,8 @@ if __name__ == "__main__":
 
     print("Démarrage du script de prédiction...")
 
-    model = load_model('best_lgbm_model.pkl')
+    # Utiliser les fonctions modifiées
+    model = load_model()
     application_train, application_test = load_data()
     
     # Conserver les données brutes
@@ -500,4 +513,4 @@ if __name__ == "__main__":
     })
 
     print("\nDémarrage de l'API FastAPI...")
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
