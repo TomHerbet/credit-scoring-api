@@ -61,27 +61,28 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      # J'ai supprimé l'étape SCP inutile (copie de fichier) qui bloquait
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Copy docker-compose to VPS
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "root"
       
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
-          # ATTENTION : Vérifiez que votre secret s'appelle bien VPS_USERNAME ou remettez VPS_USER
-          username: ${{ secrets.VPS_USERNAME }}
+          username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            # On va dans le dossier racine où vous avez mis les fichiers
-            cd /root
-            
-            # On récupère la dernière image
-            docker compose pull
-            
-            # On redémarre proprement
-            docker compose down
-            docker compose up -d
-            
-            # On nettoie les vieilles images pour gagner de la place
+            cd root
+            docker pull ${{ secrets.DOCKER_USERNAME }}/credit-risk-api:latest
+            docker-compose down
+            docker-compose up -d
             docker system prune -af
-            
-            echo "✅ Déploiement terminé avec succès sur le nouveau VPS !"
+            echo "Déploiement terminé avec succès !"
