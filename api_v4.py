@@ -20,10 +20,10 @@ app = FastAPI(title="Credit Risk API", version="1.0")
 
 # --- CORRECTION DES CHEMINS POUR DOCKER ---
 # On utilise des chemins absolus pointant vers /app/ car c'est là que le conteneur travaille
-MODEL_PATH = os.getenv('MODEL_PATH', '/app/best_lgbm_model.pkl')
+MODEL_PATH = "best_lgbm_model.pkl"
 
 # On suppose que les données sont aussi à la racine /app/ (ou montées via volumes)
-DATA_DIR = os.getenv('DATA_DIR', '/app') 
+DATA_DIR = "."
 
 model = None
 preprocessed_test_data = None

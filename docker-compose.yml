@@ -6,8 +6,14 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - /home/deploy/app/best_lgbm_model.pkl:/app/best_lgbm_model.pkl:ro
-      - /home/deploy/app/data:/app/data:ro
+      # Modèle : Racine VPS -> Racine App
+      - ./best_lgbm_model.pkl:/app/best_lgbm_model.pkl
+      
+      # Train : Racine VPS -> Racine App
+      - ./application_train.csv:/app/application_train.csv
+      
+      # Test : Racine VPS -> Racine App
+      - ./application_test.csv:/app/application_test.csv
     environment:
       - MODEL_PATH=/app/best_lgbm_model.pkl
       - DATA_DIR=/app/data
