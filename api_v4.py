@@ -18,9 +18,12 @@ warnings.filterwarnings('ignore')
 # ===============================================================
 app = FastAPI(title="Credit Risk API", version="1.0")
 
-# Configuration des chemins via variables d'environnement
-MODEL_PATH = os.getenv('MODEL_PATH', 'best_lgbm_model.pkl')
-DATA_DIR = os.getenv('DATA_DIR', './data')
+# --- CORRECTION DES CHEMINS POUR DOCKER ---
+# On utilise des chemins absolus pointant vers /app/ car c'est là que le conteneur travaille
+MODEL_PATH = os.getenv('MODEL_PATH', '/app/best_lgbm_model.pkl')
+
+# On suppose que les données sont aussi à la racine /app/ (ou montées via volumes)
+DATA_DIR = os.getenv('DATA_DIR', '/app') 
 
 model = None
 preprocessed_test_data = None
@@ -55,9 +58,10 @@ def load_model(model_path=None):
     if model_path is None:
         model_path = MODEL_PATH
     try:
+        print(f"Tentative de chargement du modèle depuis: {model_path}")
         with open(model_path, 'rb') as f:
             loaded_model = pickle.load(f)
-        print(f"✓ Modèle chargé depuis {model_path}")
+        print(f"✓ Modèle chargé avec succès")
         return loaded_model
     except Exception as e:
         print(f"✗ Erreur lors du chargement du modèle: {e}")
@@ -71,12 +75,14 @@ def load_data(train_path=None, test_path=None):
         test_path = os.path.join(DATA_DIR, 'application_test.csv')
     
     try:
+        print(f"Tentative de chargement des données depuis: {DATA_DIR}")
         train = pd.read_csv(train_path)
         test = pd.read_csv(test_path)
         print(f"✓ Données chargées - Train: {train.shape}, Test: {test.shape}")
         return train, test
     except Exception as e:
         print(f"✗ Erreur lors du chargement des données: {e}")
+        print(f"Chemins testés: Train={train_path}, Test={test_path}")
         raise
 
 
@@ -226,7 +232,7 @@ def preprocess_data(application_train, application_test):
     # Create a dataframe of the features
     poly_features = pd.DataFrame(poly_features, 
                                   columns=poly_transformer.get_feature_names_out(['EXT_SOURCE_1', 'EXT_SOURCE_2', 
-                                                                                   'EXT_SOURCE_3', 'DAYS_BIRTH']))
+                                                                                 'EXT_SOURCE_3', 'DAYS_BIRTH']))
     
     # Add in the target
     poly_features['TARGET'] = poly_target
@@ -234,7 +240,7 @@ def preprocess_data(application_train, application_test):
     # Put test features into dataframe
     poly_features_test = pd.DataFrame(poly_features_test, 
                                        columns=poly_transformer.get_feature_names_out(['EXT_SOURCE_1', 'EXT_SOURCE_2', 
-                                                                                        'EXT_SOURCE_3', 'DAYS_BIRTH']))
+                                                                                      'EXT_SOURCE_3', 'DAYS_BIRTH']))
     
     # Merge polynomial features into training dataframe
     poly_features['SK_ID_CURR'] = application_train['SK_ID_CURR']

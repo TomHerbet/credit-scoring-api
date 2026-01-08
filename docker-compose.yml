@@ -6,11 +6,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Monter le modèle
       - /home/deploy/app/best_lgbm_model.pkl:/app/best_lgbm_model.pkl:ro
-      # Monter les données
       - /home/deploy/app/data:/app/data:ro
     environment:
       - MODEL_PATH=/app/best_lgbm_model.pkl
       - DATA_DIR=/app/data
-    restart: always
+    restart: unless-stopped
