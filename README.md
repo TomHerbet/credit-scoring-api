@@ -30,9 +30,9 @@ Voici le détail de l'organisation des dossiers et fichiers :
 ---
 *Note : Les fichiers de données (`application_train/test.csv`) et le modèle (`best_lgbm_model.pkl`) ne sont pas dans le dépôt pour des raisons de taille, mais sont requis à la racine du VPS pour l'exécution.*
 
-==========================================
+
 # API & Web Server (FastAPI / Flask)
-==========================================
+
 fastapi==0.120.1
 uvicorn==0.38.0
 starlette==0.49.0
@@ -49,9 +49,8 @@ anyio==4.11.0
 h11==0.16.0
 urllib3==2.5.0
 
-==========================================
 # Machine Learning & AI
-==========================================
+
 lightgbm==4.6.0
 xgboost==3.1.1
 catboost==1.2.8
@@ -62,18 +61,18 @@ shap
 joblib==1.5.2
 threadpoolctl==3.6.0
 
-==========================================
+
 # Data Processing & Analysis
-==========================================
+
 pandas==2.3.3
 numpy==2.3.4
 scipy==1.16.2
 pyarrow==21.0.0
 narwhals==2.10.0
 
-==========================================
+
 # Visualization
-==========================================
+
 matplotlib==3.10.7
 seaborn==0.13.2
 plotly==6.3.1
@@ -85,9 +84,9 @@ cycler==0.12.1
 fonttools==4.60.1
 kiwisolver==1.4.9
 
-==========================================
+
 # MLOps, Tracking & DevOps
-==========================================
+
 mlflow==3.5.1
 mlflow-skinny==3.5.1
 mlflow-tracing==3.5.1
@@ -101,17 +100,17 @@ GitPython==3.1.45
 gitdb==4.0.12
 smmap==5.0.2
 
-==========================================
+
 # Database & Migrations
-==========================================
+
 SQLAlchemy==2.0.44
 alembic==1.17.0
 Mako==1.3.10
 sqlparse==0.5.3
 
-==========================================
+
 # Utilities & Core Dependencies
-==========================================
+
 pydantic==2.12.3
 pydantic_core==2.41.4
 python-dotenv==1.2.1
@@ -141,9 +140,9 @@ Jinja2==3.1.6
 MarkupSafe==3.0.3
 pyparsing==3.2.5
 
-==========================================
+
 # Security & Auth
-==========================================
+
 cryptography==46.0.3
 rsa==4.9.1
 certifi==2025.10.5
